@@ -18,15 +18,20 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.i18n import i18n_patterns
+from django.utils.translation import gettext_lazy as _
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
-    path("cart/", include(("cart.urls", "cart"), namespace="cart")),
-    path("orders", include(("orders.urls", "orders"), namespace="orders")),
-    path("coupons/", include(("coupons.urls", "coupons"), namespace="coupons")),
+    path(_("cart/"), include(("cart.urls", "cart"), namespace="cart")),
+    path(_("orders"), include(("orders.urls", "orders"), namespace="orders")),
+    # path(_("payment/"), include(("payment.urls", "payment"), namespace="payment")),
+    # path("paypal/", include("paypal.standard.ipn.urls")),
+    path(_("coupons/"), include(("coupons.urls", "coupons"), namespace="coupons")),
+    path("rosetta/", include("rosetta.urls")),
     # ("shop.urls" - included url-file, "shop" - app_name)
     path("", include(("shop.urls", "shop"), namespace="shop")),
-]
+)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
